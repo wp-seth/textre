@@ -1,6 +1,11 @@
+=head1 NAME
+
+textre ("text replacer with reg exps") replaces strings in a text-file using 
+regexps.
+
 =head1 DESCRIPTION
 
-textre lets you change text in one or many text-files in-place and 
+this program lets you change text in one or many text-files in-place and 
 recursively by using regular expressions. 
 
 =head1 SYNOPSIS

@@ -523,6 +523,7 @@ if($params->{'show-default-filesRE'}){
 
 __END__
 =encoding utf-8
+
 =head1 NAME
 
 textre ("text replacer with reg exps") replaces strings in a text-file using 
