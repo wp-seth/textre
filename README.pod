@@ -1,7 +1,7 @@
 =head1 DESCRIPTION
 
-this program lets you change text one or many text-files in-place and recursively 
-by using regular expressions. 
+textre lets you change text in one or many text-files in-place and 
+recursively by using regular expressions. 
 
 =head1 SYNOPSIS
 

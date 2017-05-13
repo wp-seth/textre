@@ -16,7 +16,7 @@ use Pod::Usage;
 use POSIX qw/strftime/;       # format timestamp
 use utf8;
 
-$main::VERSION = '3.2.20170226';
+$main::VERSION = '3.2.1'; # 2017-05-12
 
 # functions
 # =========
@@ -149,9 +149,9 @@ sub syntaxCheck{
 			print "number of arguments must be exactly $additional_params[0], but is " 
 				. (0 + @ARGV) . ".\n";
 		}else{
-			print "number of arguments must be at least $additional_params[0]" 
+			print "number of arguments must be at least $additional_params[0]"
 				. ' and at most ' 
-				. ($additional_params[1] == -1 ? 'inf' : $additional_params[1]) 
+				. ($additional_params[1] == -1 ? 'inf' : $additional_params[1])
 				. ", but is " . (0 + @ARGV) . ".\n";
 		}
 		pod2usage(-exitval => 2);
@@ -163,9 +163,11 @@ sub syntaxCheck{
 			die "error: cannot recognize $params{'searchRE'}" 
 				. " as a valid regexp like /foo/bar/i\n";
 		my $pattern = $1;
+		print "pattern for search is '$pattern'.\n" if $params{'verbose'} > 2;
 		my $modifiers = $2;
-		$modifiers =~ s/e//g; # e-modifier should be in find regexp
-		$params{'findRE'} = eval('qr/$pattern/' . $modifiers);
+		print "modifiers for search are '$modifiers'.\n" if $params{'verbose'} > 2;
+		$modifiers =~ s/[eg]//g; # g- and e-modifiers should not be in find regexp
+		$params{'findRE'} = qr/(?$modifiers:$pattern)/;
 		if($params{'verbose'} > 1){
 			print "used regexp for search is $params{'findRE'}.\n";
 		}
@@ -324,7 +326,7 @@ sub syntaxCheck{
 						pos($file_content) - $len - $old_pos);
 					$old_pos = pos($file_content);
 					$self->msg(1, ' orig: ' . ($found_str =~ /\n/ ? "\n": '') . $found_str);
-					eval('$found_str =~ s'.$searchRE);
+					eval('$found_str =~ s' . $searchRE);
 					$self->msg(1, ' new: ' . ($found_str =~ /\n/ ? "\n": '') . $found_str);
 					$file_new_content .= $found_str;
 				}
@@ -350,7 +352,7 @@ sub syntaxCheck{
 				++$counter{'lines'};
 				if($counter{'lines'} =~ /$self->{'lines'}/){
 					my $old_line = $line;
-					eval('$line =~ s'.$searchRE) if defined $searchRE;
+					eval('$line =~ s' . $searchRE) if defined $searchRE;
 					$line = uc($line) if $self->{'upper-case'};
 					$line = lc($line) if $self->{'lower-case'};
 					if($self->{'germanshit'}){
@@ -528,8 +530,8 @@ regexps.
 
 =head1 DESCRIPTION
 
-this program lets you change text one or many text-files in-place and recursively 
-by using regular expressions. 
+this program lets you change text in one or many text-files in-place and 
+recursively by using regular expressions. 
 
 =head1 SYNOPSIS
 
