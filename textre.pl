@@ -15,8 +15,9 @@ use Getopt::Long qw(:config bundling);
 use Pod::Usage;
 use POSIX qw/strftime/;       # format timestamp
 use utf8;
+binmode(STDOUT, ":utf8");
 
-$main::VERSION = '3.2.1'; # 2017-05-12
+$main::VERSION = '3.2.2'; # 2017-12-04
 
 # functions
 # =========
@@ -212,7 +213,7 @@ sub syntaxCheck{
 	sub loadFile{
 		my $self   = shift;
 		my $infile = shift;
-		open my $INFILE, "<", $infile or die "$!\n";
+		open my $INFILE, '<:encoding(UTF-8)', $infile or die "$!\n";
 			my @lines = <$INFILE>;
 		close($INFILE);
 		return @lines;
@@ -222,9 +223,9 @@ sub syntaxCheck{
 		my $self    = shift;
 		my $infile  = shift;
 		my $content = '';
-		open my $INFILE, "<", $infile or die "$!\n";
+		open my $INFILE, '<:encoding(UTF-8)', $infile or die "$!\n";
 			while(!eof($INFILE)){
-				$content.=getc($INFILE);
+				$content .= getc($INFILE);
 			}
 		close($INFILE);
 		return $content;
@@ -280,7 +281,7 @@ sub syntaxCheck{
 		my $self    = shift;
 		my $outfile = shift;
 		$self->msg(1, "write file ".$outfile);
-		open(my $OUTFILE, ">", $outfile) or die " could not write file. $!\n";
+		open(my $OUTFILE, '>:encoding(UTF-8)', $outfile) or die " could not write file. $!\n";
 			print $OUTFILE @_;
 		close($OUTFILE);
 		return 1;
